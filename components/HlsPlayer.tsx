@@ -1,0 +1,86 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import type Hls from 'hls.js';
+
+type Props = {
+  src: string;
+  autoPlay?: boolean;
+  muted?: boolean;
+  controls?: boolean;
+  poster?: string;
+};
+
+export default function HlsPlayer({
+  src,
+  autoPlay = true,
+  muted = true,
+  controls = false,
+  poster
+}: Props) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+
+  useEffect(() => {
+    let hls: Hls | null = null;
+    const video = videoRef.current;
+    if (!video || !src) return;
+
+    const setup = async () => {
+      // Safari/iOS: HLS nativo
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = src;
+        video.currentTime = video.duration || 0; // Intenta ir al final
+        return;
+      }
+      // Otros navegadores vía hls.js
+      const Hls = (await import('hls.js')).default;
+      if (Hls.isSupported()) {
+        hls = new Hls({ lowLatencyMode: true });
+        hls.loadSource(src);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          // Intenta ir al final del stream
+          if (video.readyState > 0) {
+            video.currentTime = video.duration || 0;
+          }
+        });
+      }
+    };
+
+    setup();
+
+    // Reconexión automática al volver a estar visible
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        // Destruye el reproductor y lo reinicializa para forzar la carga actual
+        if (hls) {
+          hls.destroy();
+          hls = null;
+        }
+        if (video) {
+          video.src = '';
+        }
+        setup();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      if (hls) hls.destroy();
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, [src]);
+
+  return (
+    <video
+      ref={videoRef}
+      playsInline
+      autoPlay={autoPlay}
+      muted={muted}
+      controls={controls}
+      poster={poster}
+      style={{ width: '100%', height: '100%', background: '#000', borderRadius: 16, objectFit: 'cover' }}
+    />
+  );
+}

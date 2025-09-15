@@ -1,0 +1,6 @@
+npx create-next-app@latest hikvision-dashboard --typescript
+cd hikvision-dashboard
+npm i hls.js
+npm install country-flag-icons
+
+npm install

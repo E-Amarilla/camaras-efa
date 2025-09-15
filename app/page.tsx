@@ -1,102 +1,300 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import HlsPlayer from "@/components/HlsPlayer";
+import { FiMapPin } from "react-icons/fi";
+import { CiMail } from "react-icons/ci";
+import { IoChevronBackSharp } from "react-icons/io5";
+import { VscBell } from "react-icons/vsc";
+import { GoGear, GoDotFill } from "react-icons/go";
+import { FiGlobe } from "react-icons/fi";
+import { Navbar as HeroUINavbar } from "@heroui/navbar";
 
-export default function Home() {
+import { ThemeSwitch } from "@/components/theme-switch";
+
+// BASE original
+const BASE = process.env.NEXT_PUBLIC_MEDIAMTX_BASE ?? "http://localhost:8888";
+
+interface OpcionMenu {
+  id: number;
+  url: string;
+  text: string;
+}
+
+interface OpcionIcono {
+  id: number;
+  icon: React.ReactNode;
+}
+
+export default function Page() {
+  const cams = ["cam1", "cam2", "cam3", "cam4"].map((id) => ({
+    id,
+    url: `${BASE}/${id}/index.m3u8`,
+  }));
+
+  const opcionesMenu: OpcionMenu[] = [{ id: 1, url: "/", text: "Inicio" }];
+
+  // Obtenemos el path actual para determinar la navegación activa
+  const pathname = usePathname();
+
+  // Opciones de navegación para el SubNav
+  const opcionesBotones = [
+    {
+      id: 1,
+      path: "/completo",
+      text: "COMPLETO",
+    },
+    {
+      id: 2,
+      path: ["/desmoldeo", "/desmoldeo/equipox"],
+      text: "DESMOLDEO",
+    },
+    {
+      id: 3,
+      path: "/encajonado",
+      text: "ENCAJONADO",
+      disabled: true,
+    },
+    {
+      id: 4,
+      path: "/paletizado",
+      text: "PALETIZADO",
+      disabled: true,
+    },
+  ];
+
+  const opcionesIconos: OpcionIcono[] = [
+    {
+      id: 1,
+      icon: (
+        <button
+          type="button"
+          onClick={() => window.history.back()}
+          aria-label="Volver"
+          className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
+        >
+          <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
+          <IoChevronBackSharp className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
+        </button>
+      ),
+    },
+    {
+      id: 2,
+      icon: (
+        <Link
+          href="/alertas"
+          aria-label="Notificaciones"
+          className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
+        >
+          <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
+          <VscBell className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
+        </Link>
+      ),
+    },
+    {
+      id: 3,
+      icon: (
+        <Link
+          href="/configuracion"
+          aria-label="Configuración"
+          className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
+        >
+          <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
+          <GoGear className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
+        </Link>
+      ),
+    },
+    {
+      id: 4,
+      icon: (
+        <button
+          type="button"
+          aria-label="Idioma"
+          className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
+          // onClick={() => {} } // placeholder
+        >
+          <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
+          <FiGlobe className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
+        </button>
+      ),
+    },
+    { id: 5, icon: <ThemeSwitch /> },
+  ];
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-background flex flex-col overflow-y-scroll scrollbar-none">
+      {/* Añade esto para ocultar la scrollbar en Chrome, Safari y otros navegadores webkit */}
+      <style jsx global>{`
+        body::-webkit-scrollbar {
+          display: none;
+        }
+        html {
+          scrollbar-width: none;
+        }
+      `}</style>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <header className="sticky top-0 z-40 flex flex-col w-full text-textoheader font-sans">
+        <HeroUINavbar className="!bg-headerbg text-textoheader h-[4rem]" maxWidth="full" position="sticky">
+          <div className="flex flex-row h-full w-[30%] justify-start gap-[30px] items-center">
+            {opcionesIconos
+              .map(({ id, icon }) => (
+                <div key={id} className="flex items-center justify-center">
+                  {icon}
+                </div>
+              ))}
+          </div>
+
+          <p className="flex w-[40%] justify-center header">EFA - Creminox</p>
+
+          <div className="flex flex-row w-[30%] justify-end">
+            <ul className="flex flex-row w-full h-[100%] gap-[30px] justify-end">
+              {opcionesMenu.map(({ id, url, text }) => (
+                <li key={id} className="h-[100%]">
+                  <Link
+                    className={pathname === url ? "activeLink" : ""}
+                    href={url}
+                  >
+                    <span className="header">{text}</span>
+                  </Link>
+                </li>
+              ))}
+              <Link
+                href="https://creminox.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+              <Image
+                src="/creminox.png"
+                alt="Creminox"
+                width={1000}
+                height={1000}
+                className="h-[100%] w-[105px]"
+              />
+              </Link>
+            </ul>
+          </div>
+        </HeroUINavbar>
+
+        {/* Sub Nav (copiando estilos de navbar2.tsx, sin cambiar lógica) */}
+        <div className="w-full bg-background2 shadow-sm flex flex-row justify-center">
+          <ul className="flex flex-row items-center gap-6">
+            {opcionesBotones.map(({ id, text, disabled }) => {
+              // Sólo estilos: añadimos clase 'desac' si disabled (como navbar2)
+              const styleClass = disabled ? "desac" : "";
+              return (
+                <li
+                  key={id}
+                  className={`relative py-3 transition-colors font-normal ${styleClass}`}
+                >
+                  <Link
+                    href="#"
+                    className="flex items-center gap-2 hover:text-gray-900"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <GoDotFill className="text-gray-500" />
+                    <span className="header">{text}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </header>
+
+      {/* CONTENIDO */}
+      <main
+        style={{
+          flex: "1 1 auto",
+          width: "100%",
+          maxWidth: 1920,
+          margin: "0 auto",
+          padding: "22px 30px 32px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 20,
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gap: 25,
+            gridTemplateColumns: "repeat(auto-fill,minmax(430px,1fr))",
+            gridAutoRows: "minmax(280px,44vh)",
+          }}
+        >
+          {cams.map((c) => (
+            <div
+              key={c.id}
+              className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl"
+            >
+              <HlsPlayer src={c.url} />
+              <div className="absolute top-[10px] left-[14px] p-[4px_14px_4px_12px] bg-gradient-to-r from-[rgba(17,17,17,.85)] to-[rgba(17,17,17,.45)] backdrop-blur-sm rounded-[14px] text-[11px] tracking-[.18em] font-semibold uppercase border border-[rgba(255,255,255,.08)] text-textoheader">
+                {c.id}
+              </div>
+            </div>
+          ))}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* FOOTER */}
+<footer className="flex flex-col align-middle bg-footerbg text-white font-sans">
+        <div className="flex flex-row w-full max-w-[1920px] h-[10rem] justify-between align-middle p-[40px]">
+          {/* Izquierda */}
+          <ul className="flex flex-col justify-center align-middle h-full w-[30%]">
+            <li className="flex flex-row items-center justify-start h-1/2 py-[1vh] gap-[10px]">
+              <a
+                className="flex flex-row items-center h-full gap-[10px]"
+                href="https://www.google.com/maps/place/Beron+de+Astrada+2745,+CABA,+Argentina"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <FiMapPin className="w-auto h-full" />
+                <p className="items-center text-white font-sans">Beron de Astrada 2745, CABA, Argentina</p>
+              </a>
+            </li>
+          </ul>
+
+          {/* Centro (logo) */}
+          <div className="flex justify-center align-middle h-full w-[40%]">
+            <a
+              className="flex w-auto h-full p-0 justify-center items-center"
+              href="https://creminox.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Image
+                alt="Creminox logo"
+                className="h-1/2 w-auto"
+                height={2000}
+                src="/creminox-logo.png"
+                width={2000}
+              />
+            </a>
+          </div>
+
+          {/* Derecha */}
+          <ul className="flex flex-col justify-center align-middle h-full w-[30%]">
+            <li className="flex flex-row items-center justify-end h-1/2 py-[1vh] gap-[10px]">
+              <a
+                className="flex flex-row items-center h-full gap-[15px]"
+                href="mailto:soporte@creminox.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <p className="items-center text-white font-sans">soporte@creminox.com</p>
+                <CiMail className="w-auto h-full" />
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <hr className="border-[#6668]" />
+
+        <p className="flex text-xs font-light text-[#666] py-[5px] w-full justify-center align-middle font-sans">
+          ©2025 All Rights Reserved Cremona Inoxidable v2.0.0
+        </p>
       </footer>
     </div>
   );
