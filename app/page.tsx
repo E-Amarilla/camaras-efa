@@ -239,7 +239,7 @@ export default function Page() {
       </main>
 
       {/* FOOTER */}
-<footer className="flex flex-col align-middle bg-footerbg text-white font-sans">
+      <footer className="flex flex-col align-middle bg-headerbg font-sans">
         <div className="flex flex-row w-full max-w-[1920px] h-[10rem] justify-between align-middle p-[40px]">
           {/* Izquierda */}
           <ul className="flex flex-col justify-center align-middle h-full w-[30%]">
@@ -251,7 +251,7 @@ export default function Page() {
                 target="_blank"
               >
                 <FiMapPin className="w-auto h-full" />
-                <p className="items-center text-white font-sans">Beron de Astrada 2745, CABA, Argentina</p>
+                <p className="items-center font-sans">Beron de Astrada 2745, CABA, Argentina</p>
               </a>
             </li>
           </ul>
@@ -283,7 +283,7 @@ export default function Page() {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <p className="items-center text-white font-sans">soporte@creminox.com</p>
+                <p className="items-center font-sans">soporte@creminox.com</p>
                 <CiMail className="w-auto h-full" />
               </a>
             </li>
