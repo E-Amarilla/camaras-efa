@@ -124,7 +124,7 @@ export default function Page() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col overflow-y-scroll scrollbar-none">
+    <div className="min-h-screen bg-background flex flex-col scrollbar-none">
       {/* Añade esto para ocultar la scrollbar en Chrome, Safari y otros navegadores webkit */}
       <style jsx global>{`
         body::-webkit-scrollbar {
@@ -204,33 +204,15 @@ export default function Page() {
       </header>
 
       {/* CONTENIDO */}
-      <main
-        style={{
-          flex: "1 1 auto",
-          width: "100%",
-          maxWidth: 1920,
-          margin: "0 auto",
-          padding: "22px 30px 32px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 20,
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gap: 25,
-            gridTemplateColumns: "repeat(auto-fill,minmax(430px,1fr))",
-            gridAutoRows: "minmax(280px,44vh)",
-          }}
-        >
+      <main className="place-content-around flex-1 w-full max-w-[1920px] mx-auto pt-[22px] pr-[30px] pb-[32px] pl-[30px] flex flex-col gap-[20px]">
+        <div className="grid gap-[25px] grid-cols-[repeat(auto-fill,minmax(430px,1fr))] grid-auto-rows-[minmax(280px,44vh)]">
           {cams.map((c) => (
             <div
               key={c.id}
-              className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl"
+              className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl "
             >
               <HlsPlayer src={c.url} />
-              <div className="absolute top-[10px] left-[14px] p-[4px_14px_4px_12px] bg-gradient-to-r from-[rgba(17,17,17,.85)] to-[rgba(17,17,17,.45)] backdrop-blur-sm rounded-[14px] text-[11px] tracking-[.18em] font-semibold uppercase border border-[rgba(255,255,255,.08)] text-textoheader">
+              <div className="absolute top-[10px] left-[14px] p-[4px_14px_4px_12px] bg-texto2-to-r from-[rgba(17,17,17,.85)] to-[rgba(17,17,17,.45)] backdrop-blur-sm rounded-[14px] text-[11px] tracking-[.18em] font-semibold uppercase border border-[rgba(255,255,255,.08)] text-textoheader">
                 {c.id}
               </div>
             </div>

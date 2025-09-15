@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={`${fontSans.variable} ${fontMono.variable}`} suppressHydrationWarning>
-      <body className="min-h-screen bg-background text-texto font-sans antialiased">
+      <body className="min-h-screen bg-background text-texto font-sans antialiased ">
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           {children}
         </Providers>
