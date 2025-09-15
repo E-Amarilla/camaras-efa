@@ -1,6 +1,10 @@
 npx create-next-app@latest hikvision-dashboard --typescript
 cd hikvision-dashboard
 npm i hls.js
+npm install @heroui/navbar
+npm install @heroui/switch
+npm install next-themes
+npm install react-icons/ci
 npm install country-flag-icons
 
 npm install
