@@ -8,13 +8,13 @@ import useOutsideClick from "@/hooks/useOutsideClick";
 
 type Option = {
   value: string;
-  flagComponent: React.ComponentType<any>;
+  flagComponent: React.ElementType;
 };
 
 const DropdownBanderas = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { i18n } = useTranslation();
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useOutsideClick(dropdownRef, () => {
     setIsOpen(false);

@@ -7,9 +7,12 @@ import HlsPlayer from "@/components/HlsPlayer";
 import { FiMapPin } from "react-icons/fi";
 import { CiMail } from "react-icons/ci";
 import { IoChevronBackSharp } from "react-icons/io5";
-import { VscBell } from "react-icons/vsc";
 import { GoGear, GoDotFill } from "react-icons/go";
+import { VscBell } from "react-icons/vsc";
 import { Navbar as HeroUINavbar } from "@heroui/navbar";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+
+import useUrlParams from "@/hooks/SessionStorage";
 
 import DropdownBanderas from "@/components/dropdownBanderas";
 import { useTranslation } from "react-i18next";
@@ -33,10 +36,72 @@ interface OpcionIcono {
 export default function Page() {
   const { t } = useTranslation();
 
-  const cams = ["cam1", "cam2", "cam3", "cam4"].map((id) => ({
-    id,
-    url: `${BASE}/${id}/index.m3u8`,
-  }));
+  const {userData, isParamsLoaded } = useUrlParams();
+
+  const cams = useMemo(
+    () =>
+      ["cam1", "cam2", "cam3", "cam4"].map((id) => ({
+        id,
+        url: `${BASE}/${id}/index.m3u8`,
+      })),
+    []
+  );
+
+  const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>(
+    () => cams.reduce((acc, c) => ((acc[c.id] = true), acc), {} as Record<string, boolean>)
+  );
+
+  const containerRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    const listeners: Array<() => void> = [];
+
+    cams.forEach((c) => {
+      const container = containerRefs.current[c.id];
+      if (!container) return;
+      const video: HTMLVideoElement | null = container.querySelector("video");
+      if (!video) {
+        // Si no existe video aún, intentaremos más tarde con MutationObserver
+        const obs = new MutationObserver((_, ob) => {
+          const v = container.querySelector("video");
+            if (v) {
+              const onLoaded = () =>
+                setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
+              const onErr = () =>
+                setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
+              v.addEventListener("loadeddata", onLoaded);
+              v.addEventListener("error", onErr);
+            listeners.push(() => {
+              v.removeEventListener("loadeddata", onLoaded);
+              v.removeEventListener("error", onErr);
+            });
+            ob.disconnect();
+          }
+        });
+        obs.observe(container, { childList: true, subtree: true });
+        listeners.push(() => obs.disconnect());
+        return;
+      }
+
+      if (video.readyState >= 3) {
+        setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
+        return;
+      }
+
+      const onLoaded = () =>
+        setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
+      const onErr = () =>
+        setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
+      video.addEventListener("loadeddata", onLoaded);
+      video.addEventListener("error", onErr);
+      listeners.push(() => {
+        video.removeEventListener("loadeddata", onLoaded);
+        video.removeEventListener("error", onErr);
+      });
+    });
+
+    return () => listeners.forEach((fn) => fn());
+  }, [cams]);
 
   const opcionesMenu: OpcionMenu[] = [
     { id: 1, url: "http://192.168.10.114:3000/completo", text: t("min.home") }
@@ -92,6 +157,21 @@ export default function Page() {
       id: 2,
       icon: (
         <a
+          href="http://192.168.10.114:3000/alertas"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Alertas"
+          className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
+        >
+          <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
+          <VscBell className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
+        </a>
+      ),
+    },
+    {
+      id: 3,
+      icon: (
+        <a
           href="http://192.168.10.114:3000/configuracion"
           target="_blank"
           rel="noopener noreferrer"
@@ -103,8 +183,8 @@ export default function Page() {
         </a>
       ),
     },
-    { id: 3, icon: <DropdownBanderas /> },
-    { id: 4, icon: <ThemeSwitch /> },
+    { id: 4, icon: <DropdownBanderas /> },
+    { id: 5, icon: <ThemeSwitch /> },
   ];
 
   return (
@@ -198,10 +278,19 @@ export default function Page() {
           {cams.map((c) => (
             <div
               key={c.id}
+              ref={(el) => { containerRefs.current[c.id] = el; }}
               className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl min-h-[280px] flex flex-col"
             >
               <div className="w-full h-full">
                 <HlsPlayer src={c.url} />
+                {loadingMap[c.id] && (
+                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[rgba(0,0,0,0.45)]">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="animate-spin rounded-full border-4 border-t-transparent border-white w-12 h-12" />
+                      <span className="text-white font-semibold tracking-wider">{t("min.cargando")}</span>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="absolute top-[10px] left-[14px] p-[4px_14px_4px_12px] bg-texto2-to-r from-[rgba(17,17,17,.85)] to-[rgba(17,17,17,.45)] backdrop-blur-sm rounded-[14px] text-[11px] tracking-[.18em] font-semibold uppercase border border-[rgba(255,255,255,.08)] text-textoheader">
                 {c.id}

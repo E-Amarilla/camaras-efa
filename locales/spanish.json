@@ -9,6 +9,7 @@
     "min":
     {   
         "home": "Inicio",
-        "derechos": "©2025 Todos los derechos reservados Cremona Inoxidable v2.0.0"
+        "derechos": "©2025 Todos los derechos reservados Cremona Inoxidable v2.0.0",
+        "cargando": "Cargando..."
     }
 }

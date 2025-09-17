@@ -25,6 +25,13 @@ declare module "@react-types/shared" {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
+  
+  const spyPush: typeof router.push = (href, opts) => {
+    // te muestra quién llamó
+    console.warn("router.push ->", href, opts);
+    console.trace();
+    return router.push(href as any, opts as any);
+  };
 
   return (
     <HeroUIProvider navigate={router.push}>
