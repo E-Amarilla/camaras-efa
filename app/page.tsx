@@ -12,8 +12,6 @@ import { VscBell } from "react-icons/vsc";
 import { Navbar as HeroUINavbar } from "@heroui/navbar";
 import React, { useEffect, useRef, useState, useMemo } from "react";
 
-import useUrlParams from "@/hooks/SessionStorage";
-
 import DropdownBanderas from "@/components/dropdownBanderas";
 import { useTranslation } from "react-i18next";
 
@@ -36,19 +34,20 @@ interface OpcionIcono {
 export default function Page() {
   const { t } = useTranslation();
 
-  const {userData, isParamsLoaded } = useUrlParams();
-
   const cams = useMemo(
     () =>
       ["cam1", "cam2", "cam3", "cam4"].map((id) => ({
         id,
         url: `${BASE}/${id}/index.m3u8`,
       })),
-    []
+    [],
   );
 
-  const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>(
-    () => cams.reduce((acc, c) => ((acc[c.id] = true), acc), {} as Record<string, boolean>)
+  const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>(() =>
+    cams.reduce(
+      (acc, c) => ((acc[c.id] = true), acc),
+      {} as Record<string, boolean>,
+    ),
   );
 
   const containerRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -64,13 +63,17 @@ export default function Page() {
         // Si no existe video aún, intentaremos más tarde con MutationObserver
         const obs = new MutationObserver((_, ob) => {
           const v = container.querySelector("video");
-            if (v) {
-              const onLoaded = () =>
-                setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
-              const onErr = () =>
-                setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
-              v.addEventListener("loadeddata", onLoaded);
-              v.addEventListener("error", onErr);
+          if (v) {
+            const onLoaded = () =>
+              setLoadingMap((prev) =>
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+              );
+            const onErr = () =>
+              setLoadingMap((prev) =>
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+              );
+            v.addEventListener("loadeddata", onLoaded);
+            v.addEventListener("error", onErr);
             listeners.push(() => {
               v.removeEventListener("loadeddata", onLoaded);
               v.removeEventListener("error", onErr);
@@ -84,14 +87,20 @@ export default function Page() {
       }
 
       if (video.readyState >= 3) {
-        setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
+        setLoadingMap((prev) =>
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+        );
         return;
       }
 
       const onLoaded = () =>
-        setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
+        setLoadingMap((prev) =>
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+        );
       const onErr = () =>
-        setLoadingMap((prev) => (prev[c.id] === false ? prev : { ...prev, [c.id]: false }));
+        setLoadingMap((prev) =>
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+        );
       video.addEventListener("loadeddata", onLoaded);
       video.addEventListener("error", onErr);
       listeners.push(() => {
@@ -104,7 +113,7 @@ export default function Page() {
   }, [cams]);
 
   const opcionesMenu: OpcionMenu[] = [
-    { id: 1, url: "http://192.168.10.114:3000/completo", text: t("min.home") }
+    { id: 1, url: "http://192.168.10.114:3000/completo", text: t("min.home") },
   ];
   // Obtenemos el path actual para determinar la navegación activa
   const pathname = usePathname();
@@ -200,14 +209,17 @@ export default function Page() {
       `}</style>
 
       <header className="sticky top-0 z-40 flex flex-col w-full text-textoheader font-sans">
-        <HeroUINavbar className="!bg-headerbg text-textoheader h-[4rem]" maxWidth="full" position="sticky">
+        <HeroUINavbar
+          className="!bg-headerbg text-textoheader h-[4rem]"
+          maxWidth="full"
+          position="sticky"
+        >
           <div className="flex flex-row h-full w-[30%] justify-start gap-[30px] items-center">
-            {opcionesIconos
-              .map(({ id, icon }) => (
-                <div key={id} className="flex items-center justify-center">
-                  {icon}
-                </div>
-              ))}
+            {opcionesIconos.map(({ id, icon }) => (
+              <div key={id} className="flex items-center justify-center">
+                {icon}
+              </div>
+            ))}
           </div>
 
           <p className="flex w-[40%] justify-center header">EFA - Creminox</p>
@@ -229,13 +241,13 @@ export default function Page() {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-              <Image
-                src="/creminox.png"
-                alt="Creminox"
-                width={1000}
-                height={1000}
-                className="h-[100%] w-[105px]"
-              />
+                <Image
+                  src="/creminox.png"
+                  alt="Creminox"
+                  width={1000}
+                  height={1000}
+                  className="h-[100%] w-[105px]"
+                />
               </Link>
             </ul>
           </div>
@@ -246,9 +258,14 @@ export default function Page() {
           <ul className="flex flex-row items-center gap-6">
             {opcionesBotones.map(({ id, path: p, text, disabled }) => {
               const styleClass = disabled ? "desac" : "";
-              const isExternal = typeof p === "string" && (/^(https?:)?\/\//.test(p) || /^\d/.test(p));
+              const isExternal =
+                typeof p === "string" &&
+                (/^(https?:)?\/\//.test(p) || /^\d/.test(p));
               return (
-                <li key={id} className={`relative py-3 transition-colors font-normal ${styleClass}`}>
+                <li
+                  key={id}
+                  className={`relative py-3 transition-colors font-normal ${styleClass}`}
+                >
                   {isExternal ? (
                     <a
                       href={p.startsWith("http") ? p : `http://${p}`}
@@ -260,7 +277,10 @@ export default function Page() {
                       <span className="header">{text}</span>
                     </a>
                   ) : (
-                    <Link href={Array.isArray(p) ? p[0] : p} className="flex items-center gap-2">
+                    <Link
+                      href={Array.isArray(p) ? p[0] : p}
+                      className="flex items-center gap-2"
+                    >
                       <GoDotFill className="text-gray-500" />
                       <span className="header">{text}</span>
                     </Link>
@@ -274,12 +294,14 @@ export default function Page() {
 
       {/* CONTENIDO */}
       <main className="place-content-around flex-1 w-full max-w-[1920px] mx-auto pt-[22px] pr-[30px] pb-[32px] pl-[30px] flex flex-col gap-[20px]">
-        <div className="grid gap-[25px] grid-cols-[repeat(auto-fill,minmax(430px,1fr))] auto-rows-[minmax(280px,44vh)]">
+        <div className="grid gap-6 grid-cols-2 xl:grid-cols-4 auto-rows-fr">
           {cams.map((c) => (
             <div
               key={c.id}
-              ref={(el) => { containerRefs.current[c.id] = el; }}
-              className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl min-h-[280px] flex flex-col"
+              ref={(el) => {
+                containerRefs.current[c.id] = el;
+              }}
+              className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl aspect-square flex flex-col"
             >
               <div className="w-full h-full">
                 <HlsPlayer src={c.url} />
@@ -287,7 +309,9 @@ export default function Page() {
                   <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[rgba(0,0,0,0.45)]">
                     <div className="flex flex-col items-center gap-3">
                       <div className="animate-spin rounded-full border-4 border-t-transparent border-white w-12 h-12" />
-                      <span className="text-white font-semibold tracking-wider">{t("min.cargando")}</span>
+                      <span className="text-white font-semibold tracking-wider">
+                        {t("min.cargando")}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -313,7 +337,9 @@ export default function Page() {
                 target="_blank"
               >
                 <FiMapPin className="w-auto h-full" />
-                <p className="items-center font-sans">Beron de Astrada 2745, CABA, Argentina</p>
+                <p className="items-center font-sans">
+                  Beron de Astrada 2745, CABA, Argentina
+                </p>
               </a>
             </li>
           </ul>

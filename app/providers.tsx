@@ -25,20 +25,11 @@ declare module "@react-types/shared" {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
-  
-  const spyPush: typeof router.push = (href, opts) => {
-    // te muestra quién llamó
-    console.warn("router.push ->", href, opts);
-    console.trace();
-    return router.push(href as any, opts as any);
-  };
 
   return (
     <HeroUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>
-        <I18nextProvider i18n={i18n}>
-          {children}
-        </I18nextProvider>
+        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
       </NextThemesProvider>
     </HeroUIProvider>
   );

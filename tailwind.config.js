@@ -1,4 +1,4 @@
-const { heroui } = require("@heroui/theme");
+import { heroui } from "@heroui/theme";
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -57,7 +57,7 @@ const config = {
             textoheader: "#111",
             textohover: "#333",
             textodesac: "#929292ff",
-            
+
             datosblueback: "#a4deffff",
             datosbluebackhover: "#93d2f7ff",
           },
@@ -77,7 +77,7 @@ const config = {
             textoheader: "#FFF",
             textohover: "#DDD",
             textodesac: "#585858",
-            
+
             datosblueback: "#073753ff",
             datosbluebackhover: "#0c4566ff",
           },
@@ -87,4 +87,4 @@ const config = {
   ],
 };
 
-module.exports = config;
+export default config;
