@@ -9,5 +9,11 @@
     "home": "Home",
     "derechos": "©2025 All Rights Reserved Cremona Inoxidable v2.0.0",
     "cargando": "Loading..."
+  },
+  "login": {
+    "title": "System Access",
+    "access_required": "Access Required",
+    "description": "To access the system, you need to be redirected from an authorized external source with valid credentials.",
+    "contact": "If you have access problems, contact the system administrator."
   }
 }

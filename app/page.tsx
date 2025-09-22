@@ -14,6 +14,7 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 
 import DropdownBanderas from "@/components/dropdownBanderas";
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 import { ThemeSwitch } from "@/components/theme-switch";
 
@@ -33,6 +34,7 @@ interface OpcionIcono {
 
 export default function Page() {
   const { t } = useTranslation();
+  const { isAdmin } = useAuthContext();
 
   const cams = useMemo(
     () =>
@@ -40,14 +42,14 @@ export default function Page() {
         id,
         url: `${BASE}/${id}/index.m3u8`,
       })),
-    [],
+    []
   );
 
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>(() =>
     cams.reduce(
       (acc, c) => ((acc[c.id] = true), acc),
-      {} as Record<string, boolean>,
-    ),
+      {} as Record<string, boolean>
+    )
   );
 
   const containerRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -66,11 +68,11 @@ export default function Page() {
           if (v) {
             const onLoaded = () =>
               setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
               );
             const onErr = () =>
               setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
               );
             v.addEventListener("loadeddata", onLoaded);
             v.addEventListener("error", onErr);
@@ -88,18 +90,18 @@ export default function Page() {
 
       if (video.readyState >= 3) {
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
         );
         return;
       }
 
       const onLoaded = () =>
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
         );
       const onErr = () =>
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
         );
       video.addEventListener("loadeddata", onLoaded);
       video.addEventListener("error", onErr);
@@ -144,57 +146,74 @@ export default function Page() {
     },
   ];
 
-  const opcionesIconos: OpcionIcono[] = [
-    {
-      id: 1,
-      icon: (
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            window.history.back();
-          }}
-          aria-label="Volver"
-          className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
-        >
-          <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
-          <IoChevronBackSharp className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
-        </a>
-      ),
-    },
-    {
-      id: 2,
-      icon: (
-        <a
-          href="http://192.168.10.114:3000/alertas"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Alertas"
-          className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
-        >
-          <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
-          <VscBell className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
-        </a>
-      ),
-    },
-    {
-      id: 3,
-      icon: (
-        <a
-          href="http://192.168.10.114:3000/configuracion"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Configuración"
-          className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
-        >
-          <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
-          <GoGear className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
-        </a>
-      ),
-    },
-    { id: 4, icon: <DropdownBanderas /> },
-    { id: 5, icon: <ThemeSwitch /> },
-  ];
+  // Función para crear los iconos del header basado en el rol del usuario
+  const getOpcionesIconos = (): OpcionIcono[] => {
+    const baseIcons = [
+      {
+        id: 1,
+        icon: (
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.history.back();
+            }}
+            aria-label="Volver"
+            className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
+          >
+            <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
+            <IoChevronBackSharp className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
+          </a>
+        ),
+      },
+    ];
+
+    // Solo agregar alertas y configuración si el usuario es admin
+    if (isAdmin) {
+      baseIcons.push(
+        {
+          id: 2,
+          icon: (
+            <a
+              href="http://192.168.10.114:3000/alertas"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Alertas"
+              className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
+            >
+              <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
+              <VscBell className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
+            </a>
+          ),
+        },
+        {
+          id: 3,
+          icon: (
+            <a
+              href="http://192.168.10.114:3000/configuracion"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Configuración"
+              className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
+            >
+              <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
+              <GoGear className="w-[25px] h-[25px] header transition-transform ease-in-out group-hover:scale-110" />
+            </a>
+          ),
+        }
+      );
+    }
+
+    // Agregar siempre los iconos de idioma y theme
+    baseIcons.push(
+      { id: 4, icon: <DropdownBanderas /> },
+      { id: 5, icon: <ThemeSwitch /> }
+    );
+
+    return baseIcons;
+  };
+
+  const opcionesIconos = getOpcionesIconos();
 
   return (
     <div className="min-h-screen bg-background flex flex-col scrollbar-none">

@@ -8,13 +8,13 @@ import useOutsideClick from "@/hooks/useOutsideClick";
 
 type Option = {
   value: string;
-  flagComponent: React.ElementType;
+  flagComponent: React.ComponentType<any>;
 };
 
 const DropdownBanderas = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { i18n } = useTranslation();
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const dropdownRef = useRef(null);
 
   useOutsideClick(dropdownRef, () => {
     setIsOpen(false);
@@ -46,7 +46,9 @@ const DropdownBanderas = () => {
           style: { width: "20px", height: "15px" },
         })}
         <FaChevronDown
-          className={`ml-[2px] transition-transform ${isOpen ? "rotate-180" : ""} inline-block w-[8px] h-[8px]`}
+          className={`ml-[2px] transition-transform ${
+            isOpen ? "rotate-180" : ""
+          } inline-block w-[8px] h-[8px]`}
         />
       </button>
 
