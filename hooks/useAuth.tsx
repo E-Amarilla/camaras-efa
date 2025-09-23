@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { UserData, UserRole } from "@/types";
 
 const USER_SESSION_KEY = "efa_user_data";
-const LOGIN_URL = "http://192.168.20.20:3000";
+const LOGIN_URL = "http://192.168.20.18:3000";
 
 export const useAuth = () => {
   const [user, setUser] = useState<UserData | null>(null);
@@ -16,27 +16,20 @@ export const useAuth = () => {
   // Función para parsear los datos del usuario desde URL params
   const parseUserFromURL = (searchParams: URLSearchParams): UserData | null => {
     try {
-      const id = searchParams.get("userId");
-      const name = searchParams.get("userName");
-      const email = searchParams.get("userEmail");
-      const role = searchParams.get("userRole");
-
-      if (!id || !name) {
-        return null;
+      const userDataParam = searchParams.get("userData");
+      if (userDataParam) {
+        const decoded = decodeURIComponent(userDataParam);
+        const data = JSON.parse(decoded);
+        // data: {access_token, role, token_type}
+        // Decodificar JWT payload
+        const payload = JSON.parse(atob(data.access_token.split(".")[1]));
+        const id = payload.id.toString();
+        const name = payload.sub;
+        const role = data.role === "ADMIN" ? UserRole.ADMIN : UserRole.USER;
+        const isAdmin = role === UserRole.ADMIN;
+        return { id, name, role, isAdmin };
       }
-
-      // Determinar si es admin basado en el rol
-      const userRole =
-        role?.toLowerCase() === "admin" ? UserRole.ADMIN : UserRole.USER;
-      const isAdmin = userRole === UserRole.ADMIN;
-
-      return {
-        id,
-        name,
-        email: email || undefined,
-        role: userRole,
-        isAdmin,
-      };
+      return null;
     } catch (error) {
       console.error("Error parsing user data from URL:", error);
       return null;

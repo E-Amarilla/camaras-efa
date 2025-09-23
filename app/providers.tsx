@@ -11,6 +11,7 @@ import { I18nextProvider } from "react-i18next";
 import { i18n } from "@/i18n";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ClientLayout } from "@/components/ClientLayout";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -33,7 +34,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <NextThemesProvider {...themeProps}>
         <I18nextProvider i18n={i18n}>
           <AuthProvider>
-            <ClientLayout>{children}</ClientLayout>
+            <ClientLayout>
+              <ProtectedRoute>{children}</ProtectedRoute>
+            </ClientLayout>
           </AuthProvider>
         </I18nextProvider>
       </NextThemesProvider>

@@ -8,7 +8,9 @@
   "min": {
     "home": "Inicio",
     "derechos": "©2025 Todos los derechos reservados Cremona Inoxidable v2.0.0",
-    "cargando": "Cargando..."
+    "cargando": "Cargando...",
+    "titulo": "EFA - Creminox",
+    "camaras":"Camaras"
   },
   "login": {
     "title": "Acceso al Sistema",

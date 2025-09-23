@@ -24,6 +24,7 @@ const config = {
         bluet: "#06E5",
         water: "#33A7FD",
         red: "#F00",
+        red2: "#dd1e1eff",
         green: "#54C42D",
         lightgrey: "#8C8C8C",
         grey: "#1F1F1F",
@@ -45,6 +46,7 @@ const config = {
       themes: {
         light: {
           colors: {
+            backgroundoscuro: "#EDEDED",
             background: "#FDFDFD",
             background2: "#EDEDED",
             background3: "#E0E0E0",
@@ -65,6 +67,7 @@ const config = {
 
         dark: {
           colors: {
+            backgroundoscuro: "#111",
             background: "#1B1B1B",
             background2: "#222",
             background3: "#292929",
@@ -87,4 +90,4 @@ const config = {
   ],
 };
 
-export default config;
+module.exports = config;

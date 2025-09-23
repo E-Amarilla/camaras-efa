@@ -27,7 +27,7 @@ export default function RootLayout({
       className={`${fontSans.variable} ${fontMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-background text-texto font-sans antialiased ">
+      <body className="bg-background text-texto font-sans antialiased ">
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           {children}
         </Providers>
