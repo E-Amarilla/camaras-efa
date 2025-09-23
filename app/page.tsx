@@ -1,10 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { usePathname } from "next/navigation";
 import HlsPlayer from "@/components/HlsPlayer";
-import { FiMapPin } from "react-icons/fi";
-import { CiMail } from "react-icons/ci";
 import React, { useEffect, useRef, useState, useMemo } from "react";
 
 function saveAuthFromUrl() {
@@ -28,7 +24,7 @@ function saveAuthFromUrl() {
   if (userDataParam) {
     try {
       const userData = JSON.parse(
-        decodeURIComponent(decodeURIComponent(userDataParam))
+        decodeURIComponent(decodeURIComponent(userDataParam)),
       );
       sessionStorage.setItem("user_data", JSON.stringify(userData));
       saved = true;
@@ -57,7 +53,8 @@ function getUserDataFromSession() {
 import { useTranslation } from "react-i18next";
 
 // BASE original
-const BASE = process.env.NEXT_PUBLIC_MEDIAMTX_BASE ?? "http://localhost:8888";
+const BASE =
+  process.env.NEXT_PUBLIC_MEDIAMTX_BASE ?? "http://192.168.20.18:8888";
 
 export default function Page() {
   useEffect(() => {
@@ -76,14 +73,14 @@ export default function Page() {
         id,
         url: `${BASE}/${id}/index.m3u8`,
       })),
-    []
+    [],
   );
 
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>(() =>
     cams.reduce(
       (acc, c) => ((acc[c.id] = true), acc),
-      {} as Record<string, boolean>
-    )
+      {} as Record<string, boolean>,
+    ),
   );
 
   const containerRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -102,11 +99,11 @@ export default function Page() {
           if (v) {
             const onLoaded = () =>
               setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
               );
             const onErr = () =>
               setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
               );
             v.addEventListener("loadeddata", onLoaded);
             v.addEventListener("error", onErr);
@@ -124,18 +121,18 @@ export default function Page() {
 
       if (video.readyState >= 3) {
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
         );
         return;
       }
 
       const onLoaded = () =>
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
         );
       const onErr = () =>
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
         );
       video.addEventListener("loadeddata", onLoaded);
       video.addEventListener("error", onErr);

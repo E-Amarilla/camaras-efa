@@ -6,15 +6,20 @@ import { AR } from "country-flag-icons/react/3x2";
 
 import useOutsideClick from "@/hooks/useOutsideClick";
 
+type FlagProps = {
+  className?: string;
+  style?: React.CSSProperties;
+};
+
 type Option = {
   value: string;
-  flagComponent: React.ComponentType<any>;
+  flagComponent: React.ComponentType<FlagProps>;
 };
 
 const DropdownBanderas = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { i18n } = useTranslation();
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(dropdownRef, () => {
     setIsOpen(false);
@@ -46,7 +51,9 @@ const DropdownBanderas = () => {
           style: { width: "20px", height: "15px" },
         })}
         <FaChevronDown
-          className={`ml-[2px] transition-transform ${isOpen ? "rotate-180" : ""} inline-block w-[8px] h-[8px]`}
+          className={`ml-[2px] transition-transform ${
+            isOpen ? "rotate-180" : ""
+          } inline-block w-[8px] h-[8px]`}
         />
       </button>
 
