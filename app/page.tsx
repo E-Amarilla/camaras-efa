@@ -31,7 +31,6 @@ function saveAuthFromUrl() {
     } catch {}
   }
   if (saved) {
-    // Limpiar la URL y recargar para que la validación funcione correctamente
     window.history.replaceState({}, document.title, window.location.pathname);
     window.location.reload();
     return true;
@@ -52,17 +51,16 @@ function getUserDataFromSession() {
 
 import { useTranslation } from "react-i18next";
 
-// BASE original
-const BASE =
-  process.env.NEXT_PUBLIC_MEDIAMTX_BASE ?? "http://192.168.20.18:8888";
+const BASE = `${process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost"}:8888`;
 
 export default function Page() {
   useEffect(() => {
     const justSaved = saveAuthFromUrl();
-    if (justSaved) return; // Esperar recarga
+    if (justSaved) return;
     const userData = getUserDataFromSession();
     if (!userData || !userData.access_token || !userData.role) {
-      window.location.href = "http://192.168.20.18:3001";
+      window.location.href =
+        process.env.NEXT_PUBLIC_REDIRECT_URL ?? "http://localhost:3001";
     }
   }, []);
   const { t } = useTranslation();
@@ -93,7 +91,6 @@ export default function Page() {
       if (!container) return;
       const video: HTMLVideoElement | null = container.querySelector("video");
       if (!video) {
-        // Si no existe video aún, intentaremos más tarde con MutationObserver
         const obs = new MutationObserver((_, ob) => {
           const v = container.querySelector("video");
           if (v) {
@@ -146,7 +143,7 @@ export default function Page() {
   }, [cams]);
 
   return (
-    <div className="grid gap-6 grid-cols-2 xl:grid-cols-4 auto-rows-fr">
+    <div className="grid gap-6 grid-cols-2 xl:grid-cols-4 auto-rows-fr w-full">
       {cams.map((c) => (
         <div
           key={c.id}

@@ -26,20 +26,17 @@ export default function HlsPlayer({
     if (!video || !src) return;
 
     const setup = async () => {
-      // Safari/iOS: HLS nativo
       if (video.canPlayType("application/vnd.apple.mpegurl")) {
         video.src = src;
-        video.currentTime = video.duration || 0; // Intenta ir al final
+        video.currentTime = video.duration || 0;
         return;
       }
-      // Otros navegadores vía hls.js
       const Hls = (await import("hls.js")).default;
       if (Hls.isSupported()) {
         hls = new Hls({ lowLatencyMode: true });
         hls.loadSource(src);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          // Intenta ir al final del stream
           if (video.readyState > 0) {
             video.currentTime = video.duration || 0;
           }
@@ -49,10 +46,8 @@ export default function HlsPlayer({
 
     setup();
 
-    // Reconexión automática al volver a estar visible
     const handleVisibility = () => {
       if (document.visibilityState === "visible") {
-        // Destruye el reproductor y lo reinicializa para forzar la carga actual
         if (hls) {
           hls.destroy();
           hls = null;

@@ -14,10 +14,6 @@ import DropdownBanderas from "@/components/footer&header/dropdownBanderas";
 import { useAuth } from "@/hooks/useAuth";
 import { UserRole } from "@/types";
 
-interface Header1Props {
-  currentPath: string;
-}
-
 interface OpcionIcono {
   id: number;
   url?: string;
@@ -31,7 +27,7 @@ interface OpcionMenu {
   onClick?: (e: React.MouseEvent) => void;
 }
 
-export const Navbar: React.FC<Header1Props> = ({ currentPath }) => {
+export const Navbar: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
@@ -139,10 +135,7 @@ export const Navbar: React.FC<Header1Props> = ({ currentPath }) => {
                 </button>
               ) : (
                 url && (
-                  <Link
-                    className={currentPath === url ? "activeLink" : ""}
-                    href={url}
-                  >
+                  <Link href={url}>
                     <span className="header">{text}</span>
                   </Link>
                 )

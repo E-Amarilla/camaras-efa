@@ -4,7 +4,6 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-// Tipos para autenticación
 export interface UserData {
   id: string;
   name: string;
