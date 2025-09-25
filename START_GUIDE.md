@@ -46,7 +46,7 @@ cd mediamtx
 # Windows
 ./mediamtx.exe
 
-# Linux/Mac  
+# Linux/Mac
 ./mediamtx
 ```
 
@@ -110,11 +110,12 @@ npm start
 **Error común:** `ERR: json: cannot unmarshal bool into Go struct field`
 
 **Solución:**
+
 ```bash
 # Regenerar configuración con plantilla corregida
 npm run generate-config
 
-# Verificar que el puerto 8888 esté libre  
+# Verificar que el puerto 8888 esté libre
 netstat -an | grep 8888
 
 # Verificar configuración generada
@@ -122,6 +123,7 @@ cat mediamtx/mediamtx.yml
 ```
 
 **Si persiste el error:**
+
 1. El proyecto incluye una plantilla minimal optimizada para MediaMTX v1.14.0
 2. La configuración se regenera automáticamente usando la plantilla correcta
 
@@ -207,23 +209,26 @@ npm run generate-config
 **Última actualización:** Error de configuración MediaMTX **SOLUCIONADO** ✓
 
 ### ✅ Servicios Activos:
+
 - **MediaMTX v1.14.0:** ✓ Funcionando sin errores
 - **4 Cámaras:** ✓ Conectadas y streaming (H265)
 - **Aplicación Web:** ✓ Disponible en http://localhost:3001
 - **Red dinámica:** ✓ Detecta automáticamente VPN/Local
 
 ### 🔧 Solución Aplicada:
+
 - Creada plantilla minimal optimizada para MediaMTX v1.14.0
 - Sintaxis actualizada (sin parámetros deprecados)
 - Configuración automática funcionando
 - Sistema listo para uso en producción
 
 ### 🚀 Para Iniciar Ahora:
+
 ```bash
 # Terminal 1: MediaMTX
 cd mediamtx && ./mediamtx.exe
 
-# Terminal 2: Aplicación Web  
+# Terminal 2: Aplicación Web
 npm run dev
 ```
 

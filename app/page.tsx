@@ -24,7 +24,7 @@ function saveAuthFromUrl() {
   if (userDataParam) {
     try {
       const userData = JSON.parse(
-        decodeURIComponent(decodeURIComponent(userDataParam))
+        decodeURIComponent(decodeURIComponent(userDataParam)),
       );
       sessionStorage.setItem("user_data", JSON.stringify(userData));
       saved = true;
@@ -79,8 +79,8 @@ export default function Page() {
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>(() =>
     cams.reduce(
       (acc, c) => ((acc[c.id] = true), acc),
-      {} as Record<string, boolean>
-    )
+      {} as Record<string, boolean>,
+    ),
   );
 
   const containerRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -98,11 +98,11 @@ export default function Page() {
           if (v) {
             const onLoaded = () =>
               setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
               );
             const onErr = () =>
               setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
               );
             v.addEventListener("loadeddata", onLoaded);
             v.addEventListener("error", onErr);
@@ -120,18 +120,18 @@ export default function Page() {
 
       if (video.readyState >= 3) {
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
         );
         return;
       }
 
       const onLoaded = () =>
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
         );
       const onErr = () =>
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
         );
       video.addEventListener("loadeddata", onLoaded);
       video.addEventListener("error", onErr);

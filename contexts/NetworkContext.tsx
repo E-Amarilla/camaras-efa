@@ -137,7 +137,7 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
         determineNetworkConfig();
       }
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const contextValue: NetworkContextType = {
     clientIP,

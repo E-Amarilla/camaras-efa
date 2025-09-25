@@ -14,7 +14,7 @@ function getCameraIP(accessIP: string): string {
     return "192.168.20.182"; // Ajustar según la IP real de las cámaras en red local
   } else if (accessIP.match(/^192\.168\.(\d+)\./)) {
     // Red genérica 192.168.x.x
-    const segment = accessIP.split('.')[2];
+    const segment = accessIP.split(".")[2];
     return `192.168.${segment}.182`;
   } else {
     // Desarrollo local u otros casos
@@ -29,20 +29,24 @@ export async function POST(request: NextRequest) {
     if (!accessIP) {
       return NextResponse.json(
         { error: "IP de acceso requerida" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const cameraIP = getCameraIP(accessIP);
-    
-    const templatePath = path.join(process.cwd(), "mediamtx", "mediamtx.template.yml");
+
+    const templatePath = path.join(
+      process.cwd(),
+      "mediamtx",
+      "mediamtx.template.yml",
+    );
     const outputPath = path.join(process.cwd(), "mediamtx", "mediamtx.yml");
 
     // Verificar si la plantilla existe
     if (!fs.existsSync(templatePath)) {
       return NextResponse.json(
         { error: "No se encontró la plantilla de configuración" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -65,7 +69,7 @@ export async function POST(request: NextRequest) {
     console.error("Error generando configuración:", error);
     return NextResponse.json(
       { error: "Error interno del servidor" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

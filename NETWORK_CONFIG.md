@@ -211,7 +211,6 @@ webrtcAllowOrigin: "*"
 ### Paso 4: Verificar Funcionamiento
 
 1. **Verificar streams de cámaras:**
-
    - Navegar a la aplicación web
    - Las 4 cámaras deberían aparecer en la interfaz
    - URLs de streams: `http://[IP_MEDIAMTX]:8888/cam[1-4]/index.m3u8`

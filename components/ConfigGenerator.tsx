@@ -34,8 +34,6 @@ export const ConfigGenerator = () => {
       } else {
         setMessage("Error al generar la configuración");
       }
-    } catch (error) {
-      setMessage("Error de conexión al generar la configuración");
     } finally {
       setIsGenerating(false);
     }

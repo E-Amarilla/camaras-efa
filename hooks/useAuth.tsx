@@ -105,7 +105,7 @@ export const useAuth = () => {
     };
 
     initializeAuth();
-  }, [router, pathname]);
+  }, [router, pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     user,
