@@ -3,15 +3,16 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { UserData, UserRole } from "@/types";
+import { useNetwork } from "@/contexts/NetworkContext";
 
 const USER_SESSION_KEY = "efa_user_data";
-const LOGIN_URL = process.env.NEXT_PUBLIC_LOGIN_URL ?? "http://localhost:3000";
 
 export const useAuth = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const { loginURL } = useNetwork();
 
   const parseUserFromURL = (searchParams: URLSearchParams): UserData | null => {
     try {
@@ -60,7 +61,9 @@ export const useAuth = () => {
     try {
       sessionStorage.removeItem(USER_SESSION_KEY);
       setUser(null);
-      window.location.href = LOGIN_URL;
+      if (loginURL) {
+        window.location.href = loginURL;
+      }
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -83,14 +86,18 @@ export const useAuth = () => {
           } else {
             setUser(null);
             setIsLoading(false);
-            window.location.href = LOGIN_URL;
+            if (loginURL) {
+              window.location.href = loginURL;
+            }
             return;
           }
         }
       } catch (error) {
         console.error("Error initializing auth:", error);
         setUser(null);
-        window.location.href = LOGIN_URL;
+        if (loginURL) {
+          window.location.href = loginURL;
+        }
         return;
       } finally {
         setIsLoading(false);

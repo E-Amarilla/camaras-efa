@@ -1,0 +1,94 @@
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Determina la IP de las cámaras según la IP de acceso
+ * @param {string} accessIP - IP desde donde se accede a la aplicación
+ * @returns {string} - IP de las cámaras
+ */
+function getCameraIP(accessIP) {
+    if (accessIP === "192.168.10.225") {
+        // Red VPN
+        return "192.168.10.182";
+    } else if (accessIP === "192.168.20.150") {
+        // Red local
+        return "192.168.20.182"; // Ajustar según la IP real de las cámaras en red local
+    } else if (accessIP.match(/^192\.168\.(\d+)\./)) {
+        // Red genérica 192.168.x.x
+        const segment = accessIP.split('.')[2];
+        return `192.168.${segment}.182`;
+    } else {
+        // Desarrollo local u otros casos
+        return "192.168.10.182"; // IP por defecto
+    }
+}
+
+/**
+ * Detecta la IP de acceso
+ * @param {string} providedIP - IP proporcionada como parámetro (opcional)
+ * @returns {string} - IP de acceso detectada
+ */
+function detectAccessIP(providedIP) {
+    if (providedIP) {
+        return providedIP;
+    }
+    
+    // En entorno de desarrollo, usar IP por defecto
+    return "localhost";
+}
+
+/**
+ * Genera la configuración de mediamtx
+ * @param {string} accessIP - IP de acceso (opcional)
+ */
+function generateConfig(accessIP) {
+    const minimalTemplatePath = path.join(__dirname, 'mediamtx.minimal.template.yml');
+    const basicTemplatePath = path.join(__dirname, 'mediamtx.basic.template.yml');
+    const originalTemplatePath = path.join(__dirname, 'mediamtx.template.yml');
+    const outputPath = path.join(__dirname, 'mediamtx.yml');
+    
+    // Usar la plantilla minimal primero, luego básica, luego original
+    let actualTemplatePath;
+    if (fs.existsSync(minimalTemplatePath)) {
+        actualTemplatePath = minimalTemplatePath;
+        console.log('Usando plantilla minimal');
+    } else if (fs.existsSync(basicTemplatePath)) {
+        actualTemplatePath = basicTemplatePath;
+        console.log('Usando plantilla básica');
+    } else if (fs.existsSync(originalTemplatePath)) {
+        actualTemplatePath = originalTemplatePath;
+        console.log('Usando plantilla original');
+    } else {
+        console.error('Error: No se encontró ningún archivo de plantilla');
+        process.exit(1);
+    }
+    
+    const detectedAccessIP = detectAccessIP(accessIP);
+    const cameraIP = getCameraIP(detectedAccessIP);
+    
+    console.log(`Generando configuración para acceso desde: ${detectedAccessIP}`);
+    console.log(`IP de cámaras configurada: ${cameraIP}`);
+    
+    // Leer la plantilla
+    let config = fs.readFileSync(actualTemplatePath, 'utf8');
+    
+    // Reemplazar los placeholders
+    config = config.replace(/\{\{CAMERA_IP\}\}/g, cameraIP);
+    
+    // Escribir el archivo final
+    fs.writeFileSync(outputPath, config);
+    
+    console.log('Configuración generada exitosamente en mediamtx.yml');
+}
+
+// Ejecutar si es llamado directamente
+if (require.main === module) {
+    const providedIP = process.argv[2];
+    generateConfig(providedIP);
+}
+
+module.exports = {
+    generateConfig,
+    getCameraIP,
+    detectAccessIP
+};

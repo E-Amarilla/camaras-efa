@@ -10,6 +10,7 @@ import { I18nextProvider } from "react-i18next";
 
 import { i18n } from "@/i18n";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { NetworkProvider } from "@/contexts/NetworkContext";
 import { ClientLayout } from "@/components/ClientLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
@@ -33,11 +34,13 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     <HeroUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>
         <I18nextProvider i18n={i18n}>
-          <AuthProvider>
-            <ClientLayout>
-              <ProtectedRoute>{children}</ProtectedRoute>
-            </ClientLayout>
-          </AuthProvider>
+          <NetworkProvider>
+            <AuthProvider>
+              <ClientLayout>
+                <ProtectedRoute>{children}</ProtectedRoute>
+              </ClientLayout>
+            </AuthProvider>
+          </NetworkProvider>
         </I18nextProvider>
       </NextThemesProvider>
     </HeroUIProvider>

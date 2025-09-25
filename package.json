@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -p 3001",
-    "build": "next build --turbopack",
+    "dev": "npm run generate-config && next dev --turbopack -p 3001",
+    "build": "npm run generate-config && next build --turbopack",
     "start": "next start -p 3001",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate-config": "node mediamtx/generate-config.js",
+    "generate-config:ip": "node mediamtx/generate-config.js",
+    "start-system": "bash start-system.sh",
+    "start-system:windows": "start-system.bat"
   },
   "dependencies": {
     "@heroui/navbar": "^2.2.24",

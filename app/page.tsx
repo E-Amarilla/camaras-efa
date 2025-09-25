@@ -24,7 +24,7 @@ function saveAuthFromUrl() {
   if (userDataParam) {
     try {
       const userData = JSON.parse(
-        decodeURIComponent(decodeURIComponent(userDataParam)),
+        decodeURIComponent(decodeURIComponent(userDataParam))
       );
       sessionStorage.setItem("user_data", JSON.stringify(userData));
       saved = true;
@@ -50,35 +50,37 @@ function getUserDataFromSession() {
 }
 
 import { useTranslation } from "react-i18next";
-
-const BASE = `${process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost"}:8888`;
+import { useNetwork } from "@/contexts/NetworkContext";
 
 export default function Page() {
+  const { redirectURL, mediaMTXBaseURL, isLoading } = useNetwork();
+
   useEffect(() => {
     const justSaved = saveAuthFromUrl();
     if (justSaved) return;
     const userData = getUserDataFromSession();
     if (!userData || !userData.access_token || !userData.role) {
-      window.location.href =
-        process.env.NEXT_PUBLIC_REDIRECT_URL ?? "http://localhost:3001";
+      if (redirectURL) {
+        window.location.href = redirectURL;
+      }
     }
-  }, []);
+  }, [redirectURL]);
+
   const { t } = useTranslation();
 
-  const cams = useMemo(
-    () =>
-      ["cam1", "cam2", "cam3", "cam4"].map((id) => ({
-        id,
-        url: `${BASE}/${id}/index.m3u8`,
-      })),
-    [],
-  );
+  const cams = useMemo(() => {
+    if (!mediaMTXBaseURL) return [];
+    return ["cam1", "cam2", "cam3", "cam4"].map((id) => ({
+      id,
+      url: `${mediaMTXBaseURL}/${id}/index.m3u8`,
+    }));
+  }, [mediaMTXBaseURL]);
 
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>(() =>
     cams.reduce(
       (acc, c) => ((acc[c.id] = true), acc),
-      {} as Record<string, boolean>,
-    ),
+      {} as Record<string, boolean>
+    )
   );
 
   const containerRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -96,11 +98,11 @@ export default function Page() {
           if (v) {
             const onLoaded = () =>
               setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
               );
             const onErr = () =>
               setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
               );
             v.addEventListener("loadeddata", onLoaded);
             v.addEventListener("error", onErr);
@@ -118,18 +120,18 @@ export default function Page() {
 
       if (video.readyState >= 3) {
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
         );
         return;
       }
 
       const onLoaded = () =>
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
         );
       const onErr = () =>
         setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false },
+          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
         );
       video.addEventListener("loadeddata", onLoaded);
       video.addEventListener("error", onErr);
@@ -141,6 +143,20 @@ export default function Page() {
 
     return () => listeners.forEach((fn) => fn());
   }, [cams]);
+
+  // Mostrar loading mientras se carga la configuración de red
+  if (isLoading || !mediaMTXBaseURL) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center gap-3">
+          <div className="animate-spin rounded-full border-4 border-t-transparent border-white w-12 h-12" />
+          <span className="text-white font-semibold tracking-wider">
+            {t("min.cargando")}
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid gap-6 grid-cols-2 xl:grid-cols-4 auto-rows-fr w-full">

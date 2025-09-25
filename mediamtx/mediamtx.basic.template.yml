@@ -1,0 +1,108 @@
+# Configuración básica de MediaMTX para EFA Cámaras
+
+###############################################
+# Configuración global
+
+# Nivel de logging
+logLevel: info
+logDestinations: [stdout]
+
+# Timeouts
+readTimeout: 10s
+writeTimeout: 10s
+writeQueueSize: 512
+
+###############################################
+# Servidor RTSP
+
+rtspDisable: no
+protocols: [udp, multicast, tcp]
+encryption: no
+rtspAddress: :8554
+rtspsAddress: :8322
+authMethods: [basic, digest]
+readBufferSize: 512000
+writeBufferSize: 512000
+
+###############################################
+# Servidor RTMP
+
+rtmpDisable: no
+rtmpAddress: :1935
+rtmpEncryption: no
+rtmpsAddress: :1936
+rtmpReadBufferSize: 512000
+rtmpWriteBufferSize: 512000
+
+###############################################
+# Servidor HLS
+
+hlsDisable: no
+hlsAddress: :8888
+hlsEncryption: no
+hlsAllowOrigin: "*"
+hlsTrustedProxies: []
+hlsDirectory: ""
+hlsSegmentCount: 7
+hlsSegmentDuration: 1s
+hlsPartDuration: 200ms
+hlsSegmentMaxSize: 50M
+
+###############################################
+# Servidor WebRTC
+
+webrtcDisable: no
+webrtcAddress: :8889
+webrtcEncryption: no
+webrtcAllowOrigin: "*"
+webrtcTrustedProxies: []
+webrtcICEServers2: []
+
+###############################################
+# Servidor SRT
+
+srtDisable: no
+srtAddress: :8890
+
+###############################################
+# Autenticación
+
+authMethod: internal
+authInternalUsers:
+  - user: any
+    pass:
+    ips: []
+    permissions:
+      - action: read
+      - action: publish
+
+###############################################
+# Control API
+
+api: no
+apiAddress: 127.0.0.1:9997
+
+###############################################
+# Métricas
+
+metrics: no
+metricsAddress: 127.0.0.1:9998
+
+###############################################
+# Grabación
+
+record: no
+
+###############################################
+# Rutas de cámaras
+
+paths:
+  cam1:
+    source: rtsp://adminsis:beron2745@{{CAMERA_IP}}:554/cam/realmonitor?channel=1&subtype=0
+  cam2:
+    source: rtsp://adminsis:beron2745@{{CAMERA_IP}}:554/cam/realmonitor?channel=2&subtype=0
+  cam3:
+    source: rtsp://adminsis:beron2745@{{CAMERA_IP}}:554/cam/realmonitor?channel=3&subtype=0
+  cam4:
+    source: rtsp://adminsis:beron2745@{{CAMERA_IP}}:554/cam/realmonitor?channel=4&subtype=0
+  all_others:
