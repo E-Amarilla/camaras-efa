@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { GoDotFill } from "react-icons/go";
 import { useTranslation } from "react-i18next";
+import { useNetwork } from "@/contexts/NetworkContext";
 
 const SubNav = () => {
   const { t } = useTranslation();
+  const { redirectURL } = useNetwork();
 
   const DESAC_CLASS = "opacity-50 cursor-not-allowed pointer-events-none";
 
@@ -48,7 +50,7 @@ const SubNav = () => {
             >
               <Link
                 className="flex items-center gap-2 hover:text-texto2"
-                href={Array.isArray(path) ? path[0] : path}
+                href={`${redirectURL}${Array.isArray(path) ? path[0] : path}`}
               >
                 <GoDotFill className="text-gray-500" />
                 <span>{text}</span>

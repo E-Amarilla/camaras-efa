@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { ThemeSwitch } from "@/components/theme-switch";
 import DropdownBanderas from "@/components/footer&header/dropdownBanderas";
 import { useAuth } from "@/hooks/useAuth";
+import { useNetwork } from "@/contexts/NetworkContext";
 import { UserRole } from "@/types";
 
 interface OpcionIcono {
@@ -30,6 +31,7 @@ interface OpcionMenu {
 export const Navbar: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { redirectURL, camarasURL } = useNetwork();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -62,7 +64,7 @@ export const Navbar: React.FC = () => {
             icon: (
               <Link
                 className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
-                href="/alertas"
+                href={`${redirectURL}/alertas`}
               >
                 <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
 
@@ -75,7 +77,7 @@ export const Navbar: React.FC = () => {
             icon: (
               <Link
                 className="group relative flex items-center justify-center w-[25px] h-[25px] ease-in-out"
-                href="/configuraciones"
+                href={`${redirectURL}/configuraciones`}
               >
                 <div className="absolute inset-0 rounded-lg bg-gray-400/0 group-hover:bg-gray-400/20 ease-in-out group-hover:scale-150 pointer-events-none" />
 
@@ -90,10 +92,10 @@ export const Navbar: React.FC = () => {
   ];
 
   const opcionesMenu: OpcionMenu[] = [
-    { id: 1, url: "/", text: t("min.home") },
+    { id: 1, url: `${redirectURL}/`, text: t("min.home") },
     {
       id: 2,
-      url: "/",
+      url: `${camarasURL}/`,
       text: t("min.camaras"),
     },
   ];

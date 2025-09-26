@@ -14,6 +14,7 @@ interface NetworkContextType {
   baseURL: string | null;
   loginURL: string | null;
   redirectURL: string | null;
+  camarasURL: string | null;
   mediaMTXBaseURL: string | null;
   isLoading: boolean;
 }
@@ -28,6 +29,7 @@ const NetworkContext = createContext<NetworkContextType>({
   baseURL: null,
   loginURL: null,
   redirectURL: null,
+  camarasURL: null,
   mediaMTXBaseURL: null,
   isLoading: true,
 });
@@ -40,6 +42,7 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
   const [baseURL, setBaseURL] = useState<string | null>(null);
   const [loginURL, setLoginURL] = useState<string | null>(null);
   const [redirectURL, setRedirectURL] = useState<string | null>(null);
+  const [camarasURL, setCamarasURL] = useState<string | null>(null);
   const [mediaMTXBaseURL, setMediaMTXBaseURL] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -54,13 +57,15 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
         let base = null;
         let login = null;
         let redirect = null;
+        let camaras = null;
         let mediaMTX = null;
 
         if (hostname === "192.168.10.225") {
           // Usuario ingresó desde VLAN
           base = "http://192.168.10.225";
           login = "http://192.168.10.225:3000";
-          redirect = "http://192.168.10.225:3001";
+          redirect = "http://192.168.10.225:3000";
+          camaras = "http://192.168.10.225:3001";
           mediaMTX = "http://192.168.10.225:8888";
           setClientIP("192.168.10.225");
           setTargetAddress("192.168.10.225");
@@ -68,7 +73,8 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
           // Usuario ingresó desde LOCAL
           base = "http://192.168.20.150";
           login = "http://192.168.20.150:3000";
-          redirect = "http://192.168.20.150:3001";
+          redirect = "http://192.168.20.150:3000";
+          camaras = "http://192.168.20.150:3001";
           mediaMTX = "http://192.168.20.150:8888";
           setClientIP("192.168.20.150");
           setTargetAddress("192.168.20.150");
@@ -82,7 +88,8 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
 
             base = `http://${baseIP}`;
             login = `http://${baseIP}:3000`;
-            redirect = `http://${baseIP}:3001`;
+            redirect = `http://${baseIP}:3000`;
+            camaras = `http://${baseIP}:3001`;
             mediaMTX = `http://${baseIP}:8888`;
             setClientIP(hostname);
             setTargetAddress(baseIP);
@@ -91,7 +98,8 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
           // Para desarrollo local (localhost) o otras situaciones
           base = "http://localhost";
           login = "http://localhost:3000";
-          redirect = "http://localhost:3001";
+          redirect = "http://localhost:3000";
+          camaras = "http://localhost:3001";
           mediaMTX = "http://localhost:8888";
           setClientIP(hostname);
           setTargetAddress("localhost");
@@ -100,13 +108,15 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
         setBaseURL(base);
         setLoginURL(login);
         setRedirectURL(redirect);
+        setCamarasURL(camaras);
         setMediaMTXBaseURL(mediaMTX);
 
         // Guardar en localStorage para uso posterior
-        if (base && login && redirect && mediaMTX) {
+        if (base && login && redirect && camaras && mediaMTX) {
           localStorage.setItem("baseURL", base);
           localStorage.setItem("loginURL", login);
           localStorage.setItem("redirectURL", redirect);
+          localStorage.setItem("camarasURL", camaras);
           localStorage.setItem("mediaMTXBaseURL", mediaMTX);
           localStorage.setItem("clientIP", hostname);
           localStorage.setItem("targetAddress", targetAddress || "");
@@ -121,14 +131,22 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
       const storedBase = localStorage.getItem("baseURL");
       const storedLogin = localStorage.getItem("loginURL");
       const storedRedirect = localStorage.getItem("redirectURL");
+      const storedCamaras = localStorage.getItem("camarasURL");
       const storedMediaMTX = localStorage.getItem("mediaMTXBaseURL");
       const storedClientIP = localStorage.getItem("clientIP");
       const storedTargetAddress = localStorage.getItem("targetAddress");
 
-      if (storedBase && storedLogin && storedRedirect && storedMediaMTX) {
+      if (
+        storedBase &&
+        storedLogin &&
+        storedRedirect &&
+        storedCamaras &&
+        storedMediaMTX
+      ) {
         setBaseURL(storedBase);
         setLoginURL(storedLogin);
         setRedirectURL(storedRedirect);
+        setCamarasURL(storedCamaras);
         setMediaMTXBaseURL(storedMediaMTX);
         setClientIP(storedClientIP);
         setTargetAddress(storedTargetAddress);
@@ -145,6 +163,7 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
     baseURL,
     loginURL,
     redirectURL,
+    camarasURL,
     mediaMTXBaseURL,
     isLoading,
   };

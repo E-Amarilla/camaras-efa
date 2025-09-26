@@ -91,7 +91,7 @@ const Footer: React.FC = () => {
 
       <hr className="border-[#6668]" />
 
-      <p className="flex text-xs font-light text-[#666] py-[5px] w-[100%] justify-center align-middle">
+      <p className="flex text-xs font-light text-texto2 py-[5px] w-[100%] justify-center align-middle">
         ©2025 All Rights Reserved Cremona Inoxidable EFA - v2.0.0
       </p>
     </footer>
