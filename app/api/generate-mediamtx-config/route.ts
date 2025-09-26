@@ -6,19 +6,19 @@ import path from "path";
  * Determina la IP de las cámaras según la IP de acceso
  */
 function getCameraIP(accessIP: string): string {
-  if (accessIP === "192.168.10.225") {
+  if (accessIP === "192.168.10.114") {
     // Red VPN
-    return "192.168.10.182";
+    return "192.168.10.160";
   } else if (accessIP === "192.168.20.150") {
     // Red local
-    return "192.168.20.182"; // Ajustar según la IP real de las cámaras en red local
+    return "192.168.20.160"; // Ajustar según la IP real de las cámaras en red local
   } else if (accessIP.match(/^192\.168\.(\d+)\./)) {
     // Red genérica 192.168.x.x
     const segment = accessIP.split(".")[2];
-    return `192.168.${segment}.182`;
+    return `192.168.${segment}.160`;
   } else {
     // Desarrollo local u otros casos
-    return "192.168.10.182"; // IP por defecto
+    return "192.168.10.160"; // IP por defecto
   }
 }
 

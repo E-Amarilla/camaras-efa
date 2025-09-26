@@ -63,7 +63,7 @@ npm run dev
 | **Entorno**    | **URL**                    |
 | -------------- | -------------------------- |
 | **Desarrollo** | http://localhost:3001      |
-| **VPN**        | http://192.168.10.225:3001 |
+| **VPN**        | http://192.168.10.114:3001 |
 | **Local**      | http://192.168.20.150:3001 |
 
 ## 🔧 Comandos Útiles
@@ -75,7 +75,7 @@ npm run dev
 npm run generate-config
 
 # Configuración para IP específica
-npm run generate-config:ip 192.168.10.225
+npm run generate-config:ip 192.168.10.114
 ```
 
 ### Desarrollo

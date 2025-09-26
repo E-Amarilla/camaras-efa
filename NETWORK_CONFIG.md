@@ -10,7 +10,7 @@ Este sistema permite que la aplicación de cámaras EFA funcione tanto en acceso
 
 La aplicación detecta automáticamente desde qué IP se está accediendo y configura las URLs correspondientes:
 
-- **192.168.10.225**: Red VPN (VLAN)
+- **192.168.10.114**: Red VPN (VLAN)
 - **192.168.20.150**: Red Local
 - **192.168.x.x**: Red genérica (ajusta automáticamente el segmento)
 - **localhost**: Desarrollo local
@@ -26,9 +26,9 @@ La aplicación detecta automáticamente desde qué IP se está accediendo y conf
 
 #### IP de Cámaras
 
-- **Red VPN (192.168.10.225)**: Cámaras en `192.168.10.182`
-- **Red Local (192.168.20.150)**: Cámaras en `192.168.20.182`
-- **Red genérica**: Cámaras en `192.168.[segmento].182`
+- **Red VPN (192.168.10.114)**: Cámaras en `192.168.10.160`
+- **Red Local (192.168.20.150)**: Cámaras en `192.168.20.160`
+- **Red genérica**: Cámaras en `192.168.[segmento].160`
 
 ## Archivos Modificados
 
@@ -78,7 +78,7 @@ npm start
 npm run generate-config
 
 # Especificar IP manualmente
-npm run generate-config:ip 192.168.10.225
+npm run generate-config:ip 192.168.10.114
 ```
 
 ### Desde la interfaz web
@@ -114,9 +114,9 @@ Usar el componente `ConfigGenerator` para regenerar la configuración dinámicam
 Las variables del archivo `.env.local` ahora son opcionales y solo se usan como fallback si la detección automática falla:
 
 ```bash
-NEXT_PUBLIC_BASE_URL=http://192.168.10.225
-NEXT_PUBLIC_LOGIN_URL=http://192.168.10.225:3000
-NEXT_PUBLIC_REDIRECT_URL=http://192.168.10.225:3001
+NEXT_PUBLIC_BASE_URL=http://192.168.10.114
+NEXT_PUBLIC_LOGIN_URL=http://192.168.10.114:3000
+NEXT_PUBLIC_REDIRECT_URL=http://192.168.10.114:3001
 ```
 
 ## Logs y Debugging
@@ -205,12 +205,13 @@ webrtcAllowOrigin: "*"
 
 2. **La aplicación estará disponible en:**
    - Desarrollo: http://localhost:3001
-   - Producción VPN: http://192.168.10.225:3001
+   - Producción VPN: http://192.168.10.114:3001
    - Producción Local: http://192.168.20.150:3001
 
 ### Paso 4: Verificar Funcionamiento
 
 1. **Verificar streams de cámaras:**
+
    - Navegar a la aplicación web
    - Las 4 cámaras deberían aparecer en la interfaz
    - URLs de streams: `http://[IP_MEDIAMTX]:8888/cam[1-4]/index.m3u8`
@@ -239,7 +240,7 @@ npm run dev
 npm run generate-config
 
 # Especificar IP manualmente
-npm run generate-config:ip 192.168.10.225
+npm run generate-config:ip 192.168.10.114
 
 # Reiniciar MediaMTX después de regenerar config
 ```
