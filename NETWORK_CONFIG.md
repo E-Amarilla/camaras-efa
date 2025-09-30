@@ -109,16 +109,6 @@ Usar el componente `ConfigGenerator` para regenerar la configuración dinámicam
 └── package.json                   # Scripts actualizados
 ```
 
-## Variables de Entorno
-
-Las variables del archivo `.env.local` ahora son opcionales y solo se usan como fallback si la detección automática falla:
-
-```bash
-NEXT_PUBLIC_BASE_URL=http://192.168.10.114
-NEXT_PUBLIC_LOGIN_URL=http://192.168.10.114:3000
-NEXT_PUBLIC_REDIRECT_URL=http://192.168.10.114:3001
-```
-
 ## Logs y Debugging
 
 Para verificar qué configuración se está usando:
