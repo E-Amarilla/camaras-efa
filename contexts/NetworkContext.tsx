@@ -66,7 +66,7 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
           login = "http://192.168.10.114:3000";
           redirect = "http://192.168.10.114:3000";
           camaras = "http://192.168.10.114:3001";
-          mediaMTX = "http://192.168.10.114:8888";
+          mediaMTX = "http://192.168.10.160:8888";
           setClientIP("192.168.10.114");
           setTargetAddress("192.168.10.114");
         } else if (hostname === "192.168.20.150") {
