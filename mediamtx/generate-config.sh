@@ -11,11 +11,11 @@ get_camera_ip() {
         echo "192.168.10.160"
     elif [[ "$access_ip" == "192.168.20.150" ]]; then
         # Red local
-        echo "192.168.20.160"  # Ajustar según la IP real de las cámaras en red local
+        echo "192.168.20.150"  # Ajustar según la IP real de las cámaras en red local
     elif [[ "$access_ip" =~ ^192\.168\.([0-9]+)\..*$ ]]; then
         # Red genérica 192.168.x.x
         local segment="${BASH_REMATCH[1]}"
-        echo "192.168.${segment}.160"
+        echo "192.168.${segment}.150"
     else
         # Desarrollo local u otros casos
         echo "192.168.10.160"  # IP por defecto

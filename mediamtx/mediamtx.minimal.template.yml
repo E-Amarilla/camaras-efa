@@ -24,10 +24,10 @@ webrtcAllowOrigin: "*"
 # Paths
 paths:
   cam1:
-    source: rtsp://adminsis:beron2745@{{CAMERA_IP}}:554/cam/realmonitor?channel=1&subtype=0
+    source: rtsp://admin:Beron2745@{{CAMERA_IP}}:554/Streaming/Channels/101
   cam2:
-    source: rtsp://adminsis:beron2745@{{CAMERA_IP}}:554/cam/realmonitor?channel=2&subtype=0
+    source: rtsp://admin:Beron2745@{{CAMERA_IP}}:554/Streaming/Channels/201
   cam3:
-    source: rtsp://adminsis:beron2745@{{CAMERA_IP}}:554/cam/realmonitor?channel=3&subtype=0
+    source: rtsp://admin:Beron2745@{{CAMERA_IP}}:554/Streaming/Channels/301
   cam4:
-    source: rtsp://adminsis:beron2745@{{CAMERA_IP}}:554/cam/realmonitor?channel=4&subtype=0
+    source: rtsp://admin:Beron2745@{{CAMERA_IP}}:554/Streaming/Channels/501
