@@ -166,7 +166,7 @@ export default function Page() {
           ref={(el) => {
             containerRefs.current[c.id] = el;
           }}
-          className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl aspect-square flex flex-col"
+          className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl flex flex-col"
         >
           <div className="w-full h-full">
             <HlsPlayer src={c.url} />
