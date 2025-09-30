@@ -15,7 +15,7 @@ COPY . .
 WORKDIR /app/mediamtx
 RUN rm -f mediamtx.exe \
     && mv mediamtx.yml mediamtxorig.yml \
-    && wget https://github.com/bluenviron/mediamtx/releases/download/v1.14.0/mediamtx_v1.14.0_linux_amd64.tar>    && tar -xzf mediamtx_v1.14.0_linux_amd64.tar.gz \
+    && wget https://github.com/bluenviron/mediamtx/releases/download/v1.14.0/mediamtx_v1.14.0_linux_amd64.tar.gz && tar -xzf mediamtx_v1.14.0_linux_amd64.tar.gz \
     && rm mediamtx_v1.14.0_linux_amd64.tar.gz \
     && chmod +x mediamtx \
     && rm mediamtx.yml \
