@@ -9,7 +9,14 @@ get_camera_ip() {
     if [[ "$access_ip" =~ ^192\.168\.([0-9]+)\..*$ ]]; then
         # Extraer el segmento de red
         local segment="${BASH_REMATCH[1]}"
-        echo "192.168.${segment}.160"
+        
+        # Si es segmento 10, usar DVR en 192.168.10.160
+        # Si es segmento 20 o cualquier otro, usar DVR en 192.168.20.41
+        if [ "$segment" == "10" ]; then
+            echo "192.168.10.160"
+        else
+            echo "192.168.20.41"
+        fi
     else
         # Desarrollo local u otros casos
         echo "192.168.10.160"  # IP por defecto

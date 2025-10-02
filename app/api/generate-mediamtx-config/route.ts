@@ -9,7 +9,10 @@ function getCameraIP(accessIP: string): string {
   if (accessIP.match(/^192\.168\.(\d+)\./)) {
     // Extraer el segmento de red
     const segment = accessIP.split(".")[2];
-    return `192.168.${segment}.160`;
+    
+    // Si es segmento 10, usar DVR en 192.168.10.160
+    // Si es segmento 20 o cualquier otro, usar DVR en 192.168.20.41
+    return segment === "10" ? "192.168.10.160" : "192.168.20.41";
   } else {
     // Desarrollo local u otros casos
     return "192.168.10.160"; // IP por defecto

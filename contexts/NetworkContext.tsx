@@ -107,30 +107,30 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
         console.log("MediaMTXBaseURL:", mediaMTX);
         console.log("============================");
 
-        // Guardar en localStorage para uso posterior
+        // Guardar en sessionStorage para uso posterior (se borra al cerrar ventana)
         if (base && login && redirect && camaras && mediaMTX) {
-          localStorage.setItem("baseURL", base);
-          localStorage.setItem("loginURL", login);
-          localStorage.setItem("redirectURL", redirect);
-          localStorage.setItem("camarasURL", camaras);
-          localStorage.setItem("mediaMTXBaseURL", mediaMTX);
-          localStorage.setItem("clientIP", hostname);
-          localStorage.setItem("targetAddress", targetAddress || "");
+          sessionStorage.setItem("baseURL", base);
+          sessionStorage.setItem("loginURL", login);
+          sessionStorage.setItem("redirectURL", redirect);
+          sessionStorage.setItem("camarasURL", camaras);
+          sessionStorage.setItem("mediaMTXBaseURL", mediaMTX);
+          sessionStorage.setItem("clientIP", hostname);
+          sessionStorage.setItem("targetAddress", targetAddress || "");
         }
 
         setIsLoading(false);
       }
     };
 
-    // Primero intentar cargar desde localStorage
+    // Primero intentar cargar desde sessionStorage
     if (typeof window !== "undefined") {
-      const storedBase = localStorage.getItem("baseURL");
-      const storedLogin = localStorage.getItem("loginURL");
-      const storedRedirect = localStorage.getItem("redirectURL");
-      const storedCamaras = localStorage.getItem("camarasURL");
-      const storedMediaMTX = localStorage.getItem("mediaMTXBaseURL");
-      const storedClientIP = localStorage.getItem("clientIP");
-      const storedTargetAddress = localStorage.getItem("targetAddress");
+      const storedBase = sessionStorage.getItem("baseURL");
+      const storedLogin = sessionStorage.getItem("loginURL");
+      const storedRedirect = sessionStorage.getItem("redirectURL");
+      const storedCamaras = sessionStorage.getItem("camarasURL");
+      const storedMediaMTX = sessionStorage.getItem("mediaMTXBaseURL");
+      const storedClientIP = sessionStorage.getItem("clientIP");
+      const storedTargetAddress = sessionStorage.getItem("targetAddress");
 
       if (
         storedBase &&
