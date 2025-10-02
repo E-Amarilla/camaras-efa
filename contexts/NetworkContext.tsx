@@ -60,31 +60,31 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
         let camaras = null;
         let mediaMTX = null;
 
-        if (hostname === "192.168.10.114") {
+        if (hostname === "192.168.10.1") {
           // Usuario ingresó desde VLAN
-          base = "http://192.168.10.114";
-          login = "http://192.168.10.114:3000";
-          redirect = "http://192.168.10.114:3000";
-          camaras = "http://192.168.10.114:3001";
-          mediaMTX = "http://192.168.10.114:8888";
-          setClientIP("192.168.10.114");
-          setTargetAddress("192.168.10.114");
-        } else if (hostname === "192.168.20.150") {
+          base = "http://192.168.10.1";
+          login = "http://192.168.10.1:3000";
+          redirect = "http://192.168.10.1:3000";
+          camaras = "http://192.168.10.1:3001";
+          mediaMTX = "http://192.168.10.1:8888";
+          setClientIP("192.168.10.1");
+          setTargetAddress("192.168.10.1");
+        } else if (hostname === "192.168.20.41") {
           // Usuario ingresó desde LOCAL
-          base = "http://192.168.20.150";
-          login = "http://192.168.20.150:3000";
-          redirect = "http://192.168.20.150:3000";
-          camaras = "http://192.168.20.150:3001";
-          mediaMTX = "http://192.168.20.150:8888";
-          setClientIP("192.168.20.150");
-          setTargetAddress("192.168.20.150");
+          base = "http://192.168.20.41";
+          login = "http://192.168.20.41:3000";
+          redirect = "http://192.168.20.41:3000";
+          camaras = "http://192.168.20.41:3001";
+          mediaMTX = "http://192.168.20.41:8888";
+          setClientIP("192.168.20.41");
+          setTargetAddress("192.168.20.41");
         } else if (hostname.startsWith("192.168.")) {
           // Caso genérico para otras IPs de la red 192.168.x.x
           const parts = hostname.split(".");
 
           if (parts.length === 4) {
             const segmento = parts[2];
-            const baseIP = `192.168.${segmento}.114`;
+            const baseIP = `192.168.${segmento}.1`;
 
             base = `http://${baseIP}`;
             login = `http://${baseIP}:3000`;

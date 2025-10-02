@@ -10,8 +10,8 @@ Este sistema permite que la aplicación de cámaras EFA funcione tanto en acceso
 
 La aplicación detecta automáticamente desde qué IP se está accediendo y configura las URLs correspondientes:
 
-- **192.168.10.114**: Red VPN (VLAN)
-- **192.168.20.150**: Red Local
+- **192.168.10.1**: Red VPN (VLAN)
+- **192.168.20.41**: Red Local
 - **192.168.x.x**: Red genérica (ajusta automáticamente el segmento)
 - **localhost**: Desarrollo local
 
@@ -26,8 +26,8 @@ La aplicación detecta automáticamente desde qué IP se está accediendo y conf
 
 #### IP de Cámaras
 
-- **Red VPN (192.168.10.114)**: Cámaras en `192.168.10.160`
-- **Red Local (192.168.20.150)**: Cámaras en `192.168.20.160`
+- **Red VPN (192.168.10.1)**: Cámaras en `192.168.10.160`
+- **Red Local (192.168.20.41)**: Cámaras en `192.168.20.160`
 - **Red genérica**: Cámaras en `192.168.[segmento].160`
 
 ## Archivos Modificados
@@ -78,7 +78,7 @@ npm start
 npm run generate-config
 
 # Especificar IP manualmente
-npm run generate-config:ip 192.168.10.114
+npm run generate-config:ip 192.168.10.1
 ```
 
 ### Desde la interfaz web
@@ -195,8 +195,8 @@ webrtcAllowOrigin: "*"
 
 2. **La aplicación estará disponible en:**
    - Desarrollo: http://localhost:3001
-   - Producción VPN: http://192.168.10.114:3001
-   - Producción Local: http://192.168.20.150:3001
+   - Producción VPN: http://192.168.10.1:3001
+   - Producción Local: http://192.168.20.41:3001
 
 ### Paso 4: Verificar Funcionamiento
 
@@ -230,7 +230,7 @@ npm run dev
 npm run generate-config
 
 # Especificar IP manualmente
-npm run generate-config:ip 192.168.10.114
+npm run generate-config:ip 192.168.10.1
 
 # Reiniciar MediaMTX después de regenerar config
 ```
