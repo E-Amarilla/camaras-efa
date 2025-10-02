@@ -60,39 +60,25 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
         let camaras = null;
         let mediaMTX = null;
 
-        if (hostname === "192.168.10.1") {
-          // Usuario ingresó desde VLAN
-          base = "http://192.168.10.1";
-          login = "http://192.168.10.1:3000";
-          redirect = "http://192.168.10.1:3000";
-          camaras = "http://192.168.10.1:3001";
-          mediaMTX = "http://192.168.10.1:8888";
-          setClientIP("192.168.10.1");
-          setTargetAddress("192.168.10.1");
-        } else if (hostname === "192.168.20.41") {
-          // Usuario ingresó desde LOCAL
-          base = "http://192.168.20.41";
-          login = "http://192.168.20.41:3000";
-          redirect = "http://192.168.20.41:3000";
-          camaras = "http://192.168.20.41:3001";
-          mediaMTX = "http://192.168.20.41:8888";
-          setClientIP("192.168.20.41");
-          setTargetAddress("192.168.20.41");
-        } else if (hostname.startsWith("192.168.")) {
-          // Caso genérico para otras IPs de la red 192.168.x.x
+        if (hostname.startsWith("192.168.")) {
+          // Extraer el segmento de red
           const parts = hostname.split(".");
 
           if (parts.length === 4) {
             const segmento = parts[2];
-            const baseIP = `192.168.${segmento}.1`;
 
-            base = `http://${baseIP}`;
-            login = `http://${baseIP}:3000`;
-            redirect = `http://${baseIP}:3000`;
-            camaras = `http://${baseIP}:3001`;
-            mediaMTX = `http://${baseIP}:8888`;
+            // Si es segmento 10 (VLAN), usar 192.168.10.1
+            // Si es segmento 20 o cualquier otro, usar 192.168.20.41
+            const frontIP =
+              segmento === "10" ? "192.168.10.1" : "192.168.20.41";
+
+            base = `http://${frontIP}:3000`;
+            login = `http://${frontIP}:3000`;
+            redirect = `http://${frontIP}:3000`;
+            camaras = `http://${hostname}:3001`;
+            mediaMTX = `http://${hostname}:8888`;
             setClientIP(hostname);
-            setTargetAddress(baseIP);
+            setTargetAddress(frontIP);
           }
         } else {
           // Para desarrollo local (localhost) o otras situaciones
@@ -110,6 +96,16 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
         setRedirectURL(redirect);
         setCamarasURL(camaras);
         setMediaMTXBaseURL(mediaMTX);
+
+        // Debug: mostrar las URLs configuradas
+        console.log("=== Network Configuration ===");
+        console.log("Hostname:", hostname);
+        console.log("BaseURL:", base);
+        console.log("LoginURL:", login);
+        console.log("RedirectURL:", redirect);
+        console.log("CamarasURL:", camaras);
+        console.log("MediaMTXBaseURL:", mediaMTX);
+        console.log("============================");
 
         // Guardar en localStorage para uso posterior
         if (base && login && redirect && camaras && mediaMTX) {

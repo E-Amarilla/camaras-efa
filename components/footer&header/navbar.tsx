@@ -42,7 +42,7 @@ export const Navbar: React.FC = () => {
     {
       id: 1,
       icon: (
-        <a
+          <a
           href="#"
           onClick={(e) => {
             e.preventDefault();
@@ -95,8 +95,11 @@ export const Navbar: React.FC = () => {
     { id: 1, url: `${redirectURL}/`, text: t("min.home") },
     {
       id: 2,
-      url: `${camarasURL}/`,
       text: t("min.camaras"),
+      onClick: (e: React.MouseEvent) => {
+        e.preventDefault();
+        // No hacer nada, ya estamos en la aplicación de cámaras
+      },
     },
   ];
 
@@ -121,7 +124,9 @@ export const Navbar: React.FC = () => {
         ))}
       </div>
 
-      <p className="flex w-[40%] justify-center header font-bold">{t("min.titulo")}</p>
+      <p className="flex w-[40%] justify-center header font-bold">
+        {t("min.titulo")}
+      </p>
 
       <div className="flex flex-row w-[30%] justify-end">
         <ul className="flex flex-row w-full h-[100%] gap-[30px] justify-end">

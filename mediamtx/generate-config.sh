@@ -6,16 +6,10 @@
 get_camera_ip() {
     local access_ip="$1"
     
-    if [[ "$access_ip" == "192.168.10.1" ]]; then
-        # Red VPN
-        echo "192.168.10.160"
-    elif [[ "$access_ip" == "192.168.20.41" ]]; then
-        # Red local
-        echo "192.168.20.41"  # Ajustar según la IP real de las cámaras en red local
-    elif [[ "$access_ip" =~ ^192\.168\.([0-9]+)\..*$ ]]; then
-        # Red genérica 192.168.x.x
+    if [[ "$access_ip" =~ ^192\.168\.([0-9]+)\..*$ ]]; then
+        # Extraer el segmento de red
         local segment="${BASH_REMATCH[1]}"
-        echo "192.168.${segment}.41"
+        echo "192.168.${segment}.160"
     else
         # Desarrollo local u otros casos
         echo "192.168.10.160"  # IP por defecto
