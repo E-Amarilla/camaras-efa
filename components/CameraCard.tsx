@@ -21,7 +21,7 @@ export default function CameraCard({ camera }: CameraCardProps) {
   };
 
   return (
-    <div className="relative w-full rounded-2xl bg-black shadow-lg overflow-hidden">
+    <div className="relative w-full aspect-[10/11] rounded-lg bg-black shadow-lg overflow-hidden">
       <HlsPlayer
         src={camera.url}
         autoPlay={true}
@@ -32,7 +32,7 @@ export default function CameraCard({ camera }: CameraCardProps) {
       />
 
       {isLoading && (
-        <div className="absolute inset-0 bg-black/80 flex items-center justify-center rounded-2xl z-10">
+        <div className="absolute inset-0 bg-black/80 flex items-center justify-center rounded-lg z-10">
           <LoadingSpinner />
         </div>
       )}
