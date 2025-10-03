@@ -80,7 +80,7 @@ export default function HlsPlayer({
       poster={poster}
       onLoadedData={onLoadedData}
       onError={onError}
-      className="w-full object-cover rounded-2xl bg-black"
+      className="w-full h-full object-cover rounded-2xl bg-black"
     />
   );
 }

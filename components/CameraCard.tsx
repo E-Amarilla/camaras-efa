@@ -21,7 +21,7 @@ export default function CameraCard({ camera }: CameraCardProps) {
   };
 
   return (
-    <div className="w-full rounded-2xl bg-background2 shadow-lg">
+    <div className="relative w-full rounded-2xl bg-black shadow-lg overflow-hidden">
       <HlsPlayer
         src={camera.url}
         autoPlay={true}

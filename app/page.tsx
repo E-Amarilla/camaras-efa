@@ -84,7 +84,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex-1 flex p-5">
+    <div className="flex-1 p-5">
       <div className="w-full h-full">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 h-full w-full items-center justify-center">
           {cameras.map((camera) => (
