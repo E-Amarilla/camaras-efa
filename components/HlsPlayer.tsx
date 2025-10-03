@@ -9,6 +9,8 @@ type Props = {
   muted?: boolean;
   controls?: boolean;
   poster?: string;
+  onLoadedData?: () => void;
+  onError?: () => void;
 };
 
 export default function HlsPlayer({
@@ -17,6 +19,8 @@ export default function HlsPlayer({
   muted = true,
   controls = false,
   poster,
+  onLoadedData,
+  onError,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -74,7 +78,9 @@ export default function HlsPlayer({
       muted={muted}
       controls={controls}
       poster={poster}
-      className="w-full h-full object-cover rounded-2xl bg-black"
+      onLoadedData={onLoadedData}
+      onError={onError}
+      className="w-full object-cover rounded-2xl bg-black"
     />
   );
 }

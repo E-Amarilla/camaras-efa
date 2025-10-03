@@ -22,3 +22,8 @@ export interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
 }
+
+export interface Camera {
+  id: string;
+  url: string;
+}

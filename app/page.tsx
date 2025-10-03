@@ -1,7 +1,10 @@
 "use client";
 
-import HlsPlayer from "@/components/HlsPlayer";
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
+import { useNetwork } from "@/contexts/NetworkContext";
+import CameraCard from "@/components/CameraCard";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { Camera } from "@/types";
 
 function saveAuthFromUrl() {
   if (typeof window === "undefined") return false;
@@ -49,9 +52,6 @@ function getUserDataFromSession() {
   }
 }
 
-import { useTranslation } from "react-i18next";
-import { useNetwork } from "@/contexts/NetworkContext";
-
 export default function Page() {
   const { redirectURL, mediaMTXBaseURL, isLoading } = useNetwork();
 
@@ -66,123 +66,32 @@ export default function Page() {
     }
   }, [redirectURL]);
 
-  const { t } = useTranslation();
-
-  const cams = useMemo(() => {
+  const cameras: Camera[] = useMemo(() => {
     if (!mediaMTXBaseURL) return [];
+
     return ["cam1", "cam2", "cam3", "cam4"].map((id) => ({
       id,
       url: `${mediaMTXBaseURL}/${id}/index.m3u8`,
     }));
   }, [mediaMTXBaseURL]);
 
-  const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>(() =>
-    cams.reduce(
-      (acc, c) => ((acc[c.id] = true), acc),
-      {} as Record<string, boolean>
-    )
-  );
-
-  const containerRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
-  useEffect(() => {
-    const listeners: Array<() => void> = [];
-
-    cams.forEach((c) => {
-      const container = containerRefs.current[c.id];
-      if (!container) return;
-      const video: HTMLVideoElement | null = container.querySelector("video");
-      if (!video) {
-        const obs = new MutationObserver((_, ob) => {
-          const v = container.querySelector("video");
-          if (v) {
-            const onLoaded = () =>
-              setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
-              );
-            const onErr = () =>
-              setLoadingMap((prev) =>
-                prev[c.id] === false ? prev : { ...prev, [c.id]: false }
-              );
-            v.addEventListener("loadeddata", onLoaded);
-            v.addEventListener("error", onErr);
-            listeners.push(() => {
-              v.removeEventListener("loadeddata", onLoaded);
-              v.removeEventListener("error", onErr);
-            });
-            ob.disconnect();
-          }
-        });
-        obs.observe(container, { childList: true, subtree: true });
-        listeners.push(() => obs.disconnect());
-        return;
-      }
-
-      if (video.readyState >= 3) {
-        setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
-        );
-        return;
-      }
-
-      const onLoaded = () =>
-        setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
-        );
-      const onErr = () =>
-        setLoadingMap((prev) =>
-          prev[c.id] === false ? prev : { ...prev, [c.id]: false }
-        );
-      video.addEventListener("loadeddata", onLoaded);
-      video.addEventListener("error", onErr);
-      listeners.push(() => {
-        video.removeEventListener("loadeddata", onLoaded);
-        video.removeEventListener("error", onErr);
-      });
-    });
-
-    return () => listeners.forEach((fn) => fn());
-  }, [cams]);
-
-  // Mostrar loading mientras se carga la configuración de red
   if (isLoading || !mediaMTXBaseURL) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center gap-3 h-full">
-          <div className="animate-spin rounded-full border-4 border-t-transparent border-white w-12 h-12" />
-          <span className="text-white font-semibold tracking-wider">
-            {t("min.cargando")}
-          </span>
-        </div>
+      <div className="flex-1 flex items-center justify-center">
+        <LoadingSpinner />
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 grid-cols-2 xl:grid-cols-4 auto-rows-fr w-full">
-      {cams.map((c) => (
-        <div
-          key={c.id}
-          ref={(el) => {
-            containerRefs.current[c.id] = el;
-          }}
-          className="relative rounded-[18px] overflow-hidden bg-background3 border border-background4 shadow-xl flex flex-col aspect-video"
-        >
-          <div className="w-full h-full">
-            <HlsPlayer src={c.url} />
-            {loadingMap[c.id] && (
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[rgba(0,0,0,0.45)]">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="animate-spin rounded-full border-4 border-t-transparent border-white w-12 h-12" />
-                  <span className="text-white font-semibold tracking-wider">
-                    {t("min.cargando")}
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
+    <div className="flex-1 flex p-5">
+      <div className="w-full h-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 h-full w-full items-center justify-center">
+          {cameras.map((camera) => (
+            <CameraCard key={camera.id} camera={camera} />
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }

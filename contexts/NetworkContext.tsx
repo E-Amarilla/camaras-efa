@@ -97,16 +97,6 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
         setCamarasURL(camaras);
         setMediaMTXBaseURL(mediaMTX);
 
-        // Debug: mostrar las URLs configuradas
-        console.log("=== Network Configuration ===");
-        console.log("Hostname:", hostname);
-        console.log("BaseURL:", base);
-        console.log("LoginURL:", login);
-        console.log("RedirectURL:", redirect);
-        console.log("CamarasURL:", camaras);
-        console.log("MediaMTXBaseURL:", mediaMTX);
-        console.log("============================");
-
         // Guardar en sessionStorage para uso posterior (se borra al cerrar ventana)
         if (base && login && redirect && camaras && mediaMTX) {
           sessionStorage.setItem("baseURL", base);
